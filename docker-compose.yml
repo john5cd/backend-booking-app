@@ -1,0 +1,65 @@
+version: '3'
+services:
+
+
+  # Spring Service
+  app:
+    container_name: cameinw-app
+    build:
+      context: ./cameinw-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8443:8443"
+    environment:
+      - TZ=Europe/Athens
+      - SERVICE_NAME=backend
+      - SERVICE_TAGS=dev
+    tty: true
+    depends_on:
+      - db
+    networks:
+      - cameinw-net
+    restart: on-failure
+
+  # MySQL Service
+  db:
+    image: mysql:latest
+    container_name: cameinw-db
+    volumes:
+      - ./mysql/dbdata/:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "4306:3306"
+    environment:
+      - SERVICE_TAGS=mysql
+      - SERVICE_NAME=dev
+      - MYSQL_DATABASE=cameinwdb
+      - MYSQL_ROOT_PASSWORD=B8tIKY82N4XFT47y
+    tty: true
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-pB8tIKY82N4XFT47y" ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - cameinw-net
+
+
+  # PHPMyAdmin Service
+  phpMyAdmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: cameinw-phpMyAdmin
+    ports:
+      - "8085:80"
+    links:
+      - db
+    restart: unless-stopped
+    networks:
+      - cameinw-net
+
+
+#Docker Networks
+networks:
+  cameinw-net:
+    driver: bridge

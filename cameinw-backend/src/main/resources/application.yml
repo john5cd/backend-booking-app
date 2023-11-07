@@ -1,0 +1,48 @@
+server:
+  address: 0.0.0.0
+  # Server port
+  port: 8443
+#  ssl:
+#      enabled: false
+   #SSL properties
+  ssl:
+    enabled: true
+    key-store: classpath:cameinwcert.p12
+    key-store-password: c@m3inwP@sS!
+    key-store-type: PKCS12
+    key-alias: cameinw
+    key-password: c@m3inwP@sS!
+
+spring:
+  # Datasource properties
+  datasource:
+    url: jdbc:mysql://db:3306/cameinwdb?createDatabaseIfNotExist=true&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: B8tIKY82N4XFT47y
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    # Hibernate properties
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    # MySQL dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  jpa.defer-datasource-initialization: false
+
+  # Image file size
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
+
+
+# Debugging
+logging:
+  level:
+    org:
+      springframework:
+        security=DEBUG:

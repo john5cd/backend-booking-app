@@ -1,0 +1,6 @@
+[submodule "cameinw-backend"]
+	path = cameinw-backend
+	url = https://github.com/akouk/cameinw-backend
+[submodule "cameinw-frontend"]
+	path = cameinw-frontend
+	url = https://github.com/akouk/cameinw-frontend
